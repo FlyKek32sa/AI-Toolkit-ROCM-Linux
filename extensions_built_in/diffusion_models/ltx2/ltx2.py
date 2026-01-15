@@ -751,7 +751,7 @@ class LTX2Model(BaseModel):
             video_timestep = timestep.clone()
 
             # i2v from first frame
-            if batch.dataset_config.do_i2v:
+            if batch.dataset_config.do_i2v and batch.dataset_config.num_frames > 1:
                 # check to see if we had it cached
                 if batch.first_frame_latents is not None:
                     init_latents = batch.first_frame_latents.to(
@@ -838,7 +838,7 @@ class LTX2Model(BaseModel):
                     batch_size,
                     num_channels_latents=num_channels_latents_audio,
                     num_mel_bins=num_mel_bins,
-                    num_frames=batch.tensor.shape[1],
+                    num_frames=batch.dataset_config.num_frames,
                     frame_rate=frame_rate,
                     sampling_rate=self.pipeline.audio_sampling_rate,
                     hop_length=self.pipeline.audio_hop_length,
